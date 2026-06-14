@@ -67,9 +67,9 @@ int main() {
 
 	// making the triangle
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+        -0.7f, -0.7f, 0.0f,
+         0.7f, -0.7f, 0.0f,
+         0.0f,  0.7f, 0.0f
     };
 
     unsigned int VAO, VBO;
