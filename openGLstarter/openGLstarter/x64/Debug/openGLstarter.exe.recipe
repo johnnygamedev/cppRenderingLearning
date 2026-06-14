@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\C++ Journey\workOpenGL\openGLstarter\x64\Debug\openGLstarter.exe</FullPath>
+      <FullPath>D:\cppRenderingLearning\openGLstarter\x64\Debug\openGLstarter.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
