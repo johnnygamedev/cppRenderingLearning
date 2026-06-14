@@ -67,9 +67,9 @@ int main() {
 
 	// making the triangle
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+        -0.7f, -0.7f, 0.0f,
+         0.7f, -0.7f, 0.0f,
+         0.0f,  0.7f, 0.0f
     };
 
     unsigned int VAO, VBO;
@@ -88,12 +88,12 @@ int main() {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.5f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 7);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
