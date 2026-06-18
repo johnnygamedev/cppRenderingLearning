@@ -55,6 +55,12 @@ unsigned int createVAO(float* verts, int size, unsigned int& vbo_out) {
 }
 
 int main() {
+    bool key1Last = false, key2Last = false, key3Last = false;
+    bool key4Last = false, key5Last = false, key6Last = false;
+
+	float colour[3] = { 1.0f, 1.0f, 1.0f }; // default white
+
+
     if (!glfwInit()) {
         std::cerr << "Failed to init GLFW" << std::endl;
         return -1;
@@ -155,9 +161,10 @@ int main() {
     int vertexCounts[] = { 0, 3, 6, 24 }; 
 
     // track key state to prevent held-key repeat
-    bool key1Last = false, key2Last = false, key3Last = false;
+	bool key4last = false, key5last = false, key6last = false;
 
     std::cout << "Press 1, 2 or 3 to switch shapes" << std::endl;
+    std::cout << "Press 4, 5 or 6 to switch colours" << std::endl;
 
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -167,19 +174,32 @@ int main() {
         bool key1 = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
         bool key2 = glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS;
         bool key3 = glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS;
+		bool key4 = glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS;
+		bool key5 = glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS;
+		bool key6 = glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS;
 
         if (key1 && !key1Last) { activeShape = 1; std::cout << "Shape: Triangle" << std::endl; }
         if (key2 && !key2Last) { activeShape = 2; std::cout << "Shape: Square" << std::endl; }
         if (key3 && !key3Last) { activeShape = 3; std::cout << "Shape: Star" << std::endl; }
 
+
+        if (key4 && !key4Last) { colour[0] = 1.0f; colour[1] = 0.0f; colour[2] = 0.0f; std::cout << "Colour: Red" << std::endl; }
+		if (key5 && !key5Last) { colour[0] = 0.0f; colour[1] = 1.0f; colour[2] = 0.0f; std::cout << "Colour: Green" << std::endl; }
+        if (key6 && !key6Last) { colour[0] = 0.6f; colour[1] = 0.0f; colour[2] = 0.8f; std::cout << "Colour: Green" << std::endl; }
+
         key1Last = key1;
         key2Last = key2;
         key3Last = key3;
+        key4Last = key4;
+        key5Last = key5;
+        key6Last = key6;
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+		glUseProgram(shaderProgram);
+       int colourLoc = glGetUniformLocation(shaderProgram, "shapeColour");
+	   glUniform3f(colourLoc,colour[0], colour[1], colour[2]);
 
-        glUseProgram(shaderProgram);
 
         // bind the correct VAO and draw
         if (activeShape == 1) { glBindVertexArray(VAO1); glDrawArrays(GL_TRIANGLES, 0, vertexCounts[1]); }
