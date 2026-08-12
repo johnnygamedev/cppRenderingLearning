@@ -1,7 +1,12 @@
 #include "Particle.h"
 
 Particle::Particle(Vec2 pos, float m)
-    : position(pos), mass(m), radius(0.05f) {
+    : position(pos),
+    velocity(0.0f, 0.0f),       
+    acceleration(0.0f, 0.0f),   
+    forceAccumulator(0.0f, 0.0f),
+    mass(m),
+    radius(0.05f) {
     invMass = (m > 0.0f) ? 1.0f / m : 0.0f;
 }
 

@@ -128,10 +128,14 @@ int main() {
             glfwSetWindowShouldClose(window, true);
 
         // spawn particle on spacebar
+       
         bool spacePressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
         if (spacePressed && !spaceLast) {
-            Particle p(Vec2(0.0f, 0.8f), 1.0f);
-            p.velocity = Vec2(((rand() % 100) / 50.0f) - 1.0f, 1.5f);
+            Particle p(Vec2(0.0f, -0.5f), 1.0f); 
+            float randomX = ((rand() % 200) / 50.0f) - 2.0f;
+            p.velocity = Vec2(randomX, 5.0f);
+            std::cout << "Spawned Space particle! Initial Velocity: "
+                << p.velocity.x << ", " << p.velocity.y << std::endl;
             particles.push_back(p);
         }
         spaceLast = spacePressed;
@@ -166,7 +170,7 @@ int main() {
                 p.velocity.x *= 0.98f;
             }
         }
-
+        
         // render
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -175,6 +179,11 @@ int main() {
 
         int offsetLoc = glGetUniformLocation(shaderProgram, "uOffset");
         int colourLoc = glGetUniformLocation(shaderProgram, "shapeColour");
+
+        //debug check
+        if (offsetLoc == -1) {
+            std::cout << "ERROR: 'uOffset' uniform not found in vertex shader!" << std::endl;
+        }
 
         glUniform3f(colourLoc, 0.2f, 0.8f, 1.0f);
 
