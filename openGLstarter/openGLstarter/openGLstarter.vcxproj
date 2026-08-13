@@ -159,7 +159,11 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Particle.h" />
+    <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RigidBody.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
