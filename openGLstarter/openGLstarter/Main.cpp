@@ -185,7 +185,7 @@ int main() {
             std::cout << "ERROR: 'uOffset' uniform not found in vertex shader!" << std::endl;
         }
 
-        glUniform3f(colourLoc, 0.2f, 0.8f, 1.0f);
+        glUniform3f(colourLoc, 0.57f, 0.0f, 1.0f);
 
         glBindVertexArray(particleVAO);
 
