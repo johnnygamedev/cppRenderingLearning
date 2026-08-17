@@ -9,7 +9,6 @@
 #include "RigidBody.h"
 #include "Collision.h"
 #include "axisB.h"
-
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -95,7 +94,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "2D Engine - Rigid Bodies & SAT Collisions", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "2D Engine", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
