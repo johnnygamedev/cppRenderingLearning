@@ -27,6 +27,7 @@ static unsigned int compileShader(unsigned int type, const char* source) {
     glShaderSource(id, 1, &source, NULL);
     glCompileShader(id);
 
+    // stuff that never happens anyway but j incase it does ik what goes wrong
     int success;
     glGetShaderiv(id, GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -36,7 +37,7 @@ static unsigned int compileShader(unsigned int type, const char* source) {
     }
     return id;
 }
-
+// its the var name! loading a whole bunch of shaders!
 unsigned int loadShader(const char* vertPath, const char* fragPath) {
     std::ifstream vFile(vertPath), fFile(fragPath);
     if (!vFile.is_open() || !fFile.is_open()) {
@@ -86,7 +87,7 @@ unsigned int createVAO(float* verts, int size, unsigned int& vbo_out) {
     vbo_out = VBO;
     return VAO;
 }
-
+// this is where the fun begins
 int main() {
     if (!glfwInit()) return -1;
 
@@ -155,7 +156,7 @@ int main() {
             bodies.push_back(body);
         }
         spaceLast = spacePressed;
-
+        // mouse make sqaure
         bool mousePressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
         if (mousePressed && !mouseLast) {
             double xpos, ypos;
@@ -172,7 +173,7 @@ int main() {
             bodies.push_back(body);
         }
         mouseLast = mousePressed;
-
+        // giving the stats to the sqaures after placement and the collisons 
         for (auto& b : bodies) {
             b.addForce(gravity * b.mass);
             b.update(deltaTime);
@@ -200,7 +201,7 @@ int main() {
                 }
             }
         }
-
+        // clean up and stuff
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
