@@ -14,7 +14,7 @@ public:
     float invMass;
     float radius;
 
-    // Declarations only! Ends with a semicolon ;
+   
     Particle(Vec2 pos, float m = 1.0f);
     void addForce(const Vec2& force);
     void update(float dt);
