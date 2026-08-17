@@ -112,8 +112,6 @@ int main() {
     uniforms.offset = glGetUniformLocation(shaderProgram, "uOffset");
     uniforms.colour = glGetUniformLocation(shaderProgram, "shapeColour");
     uniforms.angle = glGetUniformLocation(shaderProgram, "uAngle");
-
-
     //random(i keep losing where it is) fs < ------------------------------------------------------------------------------------------------------------------------ Rand Here
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -121,13 +119,13 @@ int main() {
     std::uniform_real_distribution<float> distAngVel(-5.0f, 5.0f);
 
     float bodyQuad[] = {
-        -0.04f,  0.04f, 0.0f,
-         0.04f,  0.04f, 0.0f,
-         0.04f, -0.04f, 0.0f,
+        -0.015f,  0.015f, 0.0f,
+         0.015f,  0.015f, 0.0f,
+         0.015f, -0.015f, 0.0f,
 
-        -0.04f,  0.04f, 0.0f,
-         0.04f, -0.04f, 0.0f,
-        -0.04f, -0.04f, 0.0f
+        -0.015f,  0.015f, 0.0f,
+         0.015f, -0.015f, 0.0f,
+        -0.015f, -0.015f, 0.0f
     };
 
     unsigned int bodyVBO;
@@ -150,7 +148,7 @@ int main() {
 
         bool spacePressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
         if (spacePressed && !spaceLast) {
-            RigidBody body(Vec2(0.0f, -0.5f), 0.08f, 0.08f, 1.0f);
+            RigidBody body(Vec2(0.0f, -0.5f), 0.03f, 0.03f, 1.0f);
 			// random rng line for space <------------------------------------------------------------------------------------------------------------------------ rng line for the space
             body.velocity = Vec2(distVelX(rng), 5.0f);
             body.angularVelocity = 6.0f;
@@ -169,7 +167,7 @@ int main() {
             float ndcX = (2.0f * static_cast<float>(xpos)) / width - 1.0f;
             float ndcY = 1.0f - (2.0f * static_cast<float>(ypos)) / height;
 
-            RigidBody body(Vec2(ndcX, ndcY), 0.08f, 0.08f, 1.0f);
+            RigidBody body(Vec2(ndcX, ndcY), 0.03f, 0.03f, 1.0f);
             body.angularVelocity = distAngVel(rng);
             bodies.push_back(body);
         }
@@ -207,7 +205,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
-        glUniform3f(uniforms.colour, 0.57f, 0.0f, 1.0f);
+        glUniform3f(uniforms.colour, 0.1f, 0.5f, 1.0f);
         glBindVertexArray(bodyVAO);
 
         for (const auto& b : bodies) {
