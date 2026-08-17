@@ -113,6 +113,8 @@ int main() {
     uniforms.colour = glGetUniformLocation(shaderProgram, "shapeColour");
     uniforms.angle = glGetUniformLocation(shaderProgram, "uAngle");
 
+
+    //random(i keep losing where it is) fs < ------------------------------------------------------------------------------------------------------------------------ Rand Here
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_real_distribution<float> distVelX(-2.0f, 2.0f);
