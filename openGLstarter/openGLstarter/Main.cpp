@@ -95,7 +95,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "2D Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "2D Engine | Particles: 0", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -138,10 +138,12 @@ int main() {
     bool spaceLast = false;
     bool mouseLast = false;
 
+	size_t lastBodyCount = 0; 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+		size_t count = bodies.size(); // -------------------------------------------------------------Current changes
         if (deltaTime > 0.05f) deltaTime = 0.05f;
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -226,6 +228,13 @@ int main() {
             glUniform2f(uniforms.offset, b.position.x, b.position.y);
             glUniform1f(uniforms.angle, b.orientation);
             glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
+
+        // Update window title with body count
+        if (bodies.size() != lastBodyCount) {
+            lastBodyCount = bodies.size();
+            std::string title = "2D Engine | Particles: " + std::to_string(lastBodyCount);
+            glfwSetWindowTitle(window, title.c_str());
         }
 
         glfwSwapBuffers(window);
