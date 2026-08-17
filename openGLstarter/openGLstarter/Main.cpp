@@ -151,6 +151,7 @@ int main() {
         bool spacePressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
         if (spacePressed && !spaceLast) {
             RigidBody body(Vec2(0.0f, -0.5f), 0.08f, 0.08f, 1.0f);
+			// random rng line for space <------------------------------------------------------------------------------------------------------------------------ rng line for the space
             body.velocity = Vec2(distVelX(rng), 5.0f);
             body.angularVelocity = 6.0f;
             bodies.push_back(body);
