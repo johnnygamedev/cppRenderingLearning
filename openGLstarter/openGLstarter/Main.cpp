@@ -87,7 +87,7 @@ unsigned int createVAO(float* verts, int size, unsigned int& vbo_out) {
     vbo_out = VBO;
     return VAO;
 }
-// this is where the fun begins
+// this is where the fun begins <---------------------------------------------------------------------------------------------------------------------------Main {} 
 int main() {
     if (!glfwInit()) return -1;
 
@@ -178,26 +178,39 @@ int main() {
             b.addForce(gravity * b.mass);
             b.update(deltaTime);
 
-            if (b.position.y < -0.9f) {
+            if (b.position.y < -1.0f) {
                 b.position.y = -0.9f;
                 b.velocity.y *= -0.5f;
                 b.angularVelocity *= 0.8f;
+
             }
-        }
+            if (b.position.x < -1.0f) {
+                b.position.x = -1.0f;
+                b.velocity.x *= -0.6f;
+                b.angularVelocity *= 0.8f;
 
-        for (size_t i = 0; i < bodies.size(); ++i) {
-            AxisB boxA = bodies[i].getAxisB();
+            }
+            else if (b.position.x > 1.0f) {
+                b.position.x = 1.0f;
+                b.velocity.x *= -0.6f;
+                b.angularVelocity *= 0.8f;
+            }
 
-            for (size_t j = i + 1; j < bodies.size(); ++j) {
-                AxisB boxB = bodies[j].getAxisB();
 
-                if (!boxA.overlaps(boxB)) {
-                    continue;
-                }
+            for (size_t i = 0; i < bodies.size(); ++i) {
+                AxisB boxA = bodies[i].getAxisB();
 
-                Manifold m = Collision::testBoxBox(bodies[i], bodies[j]);
-                if (m.hasCollision) {
-                    Collision::resolveCollision(m);
+                for (size_t j = i + 1; j < bodies.size(); ++j) {
+                    AxisB boxB = bodies[j].getAxisB();
+
+                    if (!boxA.overlaps(boxB)) {
+                        continue;
+                    }
+
+                    Manifold m = Collision::testBoxBox(bodies[i], bodies[j]);
+                    if (m.hasCollision) {
+                        Collision::resolveCollision(m);
+                    }
                 }
             }
         }
