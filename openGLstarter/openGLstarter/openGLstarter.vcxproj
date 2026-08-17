@@ -164,6 +164,7 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="axisB.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="RigidBody.h" />
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include "Vec2.h"
 #include "RigidBody.h"
 #include "Collision.h"
+#include "axisB.h"
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -184,7 +185,15 @@ int main() {
         }
 
         for (size_t i = 0; i < bodies.size(); ++i) {
+            AxisB boxA = bodies[i].getAxisB();
+
             for (size_t j = i + 1; j < bodies.size(); ++j) {
+                AxisB boxB = bodies[j].getAxisB();
+
+                if (!boxA.overlaps(boxB)) {
+                    continue;
+                }
+
                 Manifold m = Collision::testBoxBox(bodies[i], bodies[j]);
                 if (m.hasCollision) {
                     Collision::resolveCollision(m);

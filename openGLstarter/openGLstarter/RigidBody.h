@@ -3,10 +3,13 @@
 #define RIGIDBODY_H
 
 #include "Vec2.h"
+#include "axisB.h"
+
+
 
 class RigidBody {
 public:
-    
+    AxisB getAxisB() const;
     Vec2 position;
     Vec2 velocity;
     Vec2 acceleration;

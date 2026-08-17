@@ -59,3 +59,20 @@ void RigidBody::update(float dt) {
     forceAccumulator = Vec2(0.0f, 0.0f);
     torqueAccumulator = 0.0f;
 }
+
+
+ AxisB RigidBody::getAxisB() const {
+    float hw = width * 0.5f;
+    float hh = height * 0.5f;
+
+    float cosA = std::abs(std::cos(orientation));
+    float sinA = std::abs(std::sin(orientation));
+
+    float boundingHw = hw * cosA + hh * sinA;
+    float boundingHh = hw * sinA + hh * cosA;
+
+    AxisB box;
+    box.min = Vec2(position.x - boundingHw, position.y - boundingHh);
+    box.max = Vec2(position.x + boundingHw, position.y + boundingHh);
+    return box;
+}

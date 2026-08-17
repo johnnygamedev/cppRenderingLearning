@@ -44,5 +44,8 @@
     <ClInclude Include="Collision.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="axisB.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
