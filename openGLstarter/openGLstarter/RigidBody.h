@@ -17,7 +17,7 @@ public:
     float mass;
     float invMass;
 
-    
+	bool isColliding = false;
     float width;
     float height;
     

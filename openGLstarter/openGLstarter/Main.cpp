@@ -261,20 +261,41 @@ int main() {
         glBindVertexArray(bodyVAO);
 
         for (const auto& b : bodies) {
-			bool isConstrained = false;
-			for (const auto& constraint : constraints) {
-				if (constraint.bodyA == &b || constraint.bodyB == &b) {
-					isConstrained = true;
-					break;
-				}
-			}
 
-			if (isConstrained) {
-				glUniform3f(uniforms.colour, 1.0f, 0.2f, 0.1f);
-			}
-			else {
-				glUniform3f(uniforms.colour, 0.1f, 0.5f, 1.0f);
-			}
+            bool isConstrained = false;
+            for (const auto& constraint : constraints) {
+                if (constraint.bodyA == &b || constraint.bodyB == &b) {
+                    isConstrained = true;
+                    break;
+                }
+            }
+
+			//for (const auto& b : bodies) {
+
+   //             Vec2 color;
+			//	if (b.isColliding) {
+			//		color = Vec2(1.0f, 0.4f); // Orange for colliding bodies
+			//	}
+			//	else {
+			//		color = Vec2(0.1f, 0.5f); // Blue for non-colliding bodies
+			//	}
+
+			//	glUniform3f(uniforms.colour, color.x, color.y, 0.0f);
+
+			
+            
+           
+
+            if (isConstrained) {
+                glUniform3f(uniforms.colour, 1.0f, 0.2f, 0.1f);
+            }
+           /* else if (b.isColliding) {
+                glUniform3f(uniforms.colour, 1.0f, 0.4f, 0.0f);
+            }*/
+
+            else
+                glUniform3f(uniforms.colour, 0.1f, 0.5f, 1.0f);
+        
             glUniform2f(uniforms.offset, b.position.x, b.position.y);
             glUniform1f(uniforms.angle, b.orientation);
             glDrawArrays(GL_TRIANGLES, 0, 6);
