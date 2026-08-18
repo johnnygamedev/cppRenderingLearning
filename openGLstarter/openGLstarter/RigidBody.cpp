@@ -42,18 +42,22 @@ void RigidBody::addForceAtPoint(const Vec2& force, const Vec2& point) {
     torqueAccumulator += torque;
 }
 
-void RigidBody::update(float dt) {
+void RigidBody::update(float dt) { //----------------------------------------------------------------------------------- Work here for friction
     if (invMass == 0.0f) return;
 
     
     acceleration = forceAccumulator * invMass;
     velocity += acceleration * dt;
+
     position += velocity * dt;
 
     
     angularAcceleration = torqueAccumulator * invInertia;
     angularVelocity += angularAcceleration * dt;
     orientation += angularVelocity * dt;
+
+	velocity *= 0.99f;
+	angularVelocity *= 0.98f;
 
     
     forceAccumulator = Vec2(0.0f, 0.0f);

@@ -117,7 +117,9 @@ int main() {
     uniforms.offset = glGetUniformLocation(shaderProgram, "uOffset");
     uniforms.colour = glGetUniformLocation(shaderProgram, "shapeColour");
     uniforms.angle = glGetUniformLocation(shaderProgram, "uAngle");
-
+    
+    std::uniform_real_distribution<float> distPosX(-0.8f, 0.8f);
+    std::uniform_real_distribution<float> distPosY(0.2f, 0.8f);
     //random(i keep losing where it is) fs < ------------------------------------------------------------------------------------------------------------------------ Rand Here
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -161,7 +163,7 @@ int main() {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        size_t count = bodies.size(); // -------------------------------------------------------------Current changes
+        size_t count = bodies.size(); 
         if (deltaTime > 0.05f) deltaTime = 0.05f;
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -169,10 +171,11 @@ int main() {
 
         bool spacePressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
         if (spacePressed && !spaceLast) {
-            RigidBody body(Vec2(0.0f, -0.5f), 0.03f, 0.03f, 1.0f);
+			Vec2 position(distPosX(rng), distPosY(rng));
+            RigidBody body(position, 0.03f, 0.03f, 1.0f);
             // random rng line for space <------------------------------------------------------------------------------------------------------------------------ rng line for the space
-            body.velocity = Vec2(distVelX(rng), 5.0f);
-            body.angularVelocity = 6.0f;
+            body.velocity = Vec2(distVelX(rng), distAngVel(rng));
+            body.angularVelocity = distAngVel(rng);
             bodies.push_back(body);
         }
         spaceLast = spacePressed;
@@ -200,18 +203,27 @@ int main() {
             b.addForce(gravity * b.mass);
             b.update(deltaTime);
 
-            if (b.position.y < -1.0f) {
-                b.position.y = -0.9f;
+            if (b.position.y < -0.98f) {  //---------------------------------------------------------------------------------If i match these values they work like normal, if they are slighty off they bounce depending on the number value
+                b.position.y = -0.98f;   
+                
                 b.velocity.y *= -0.5f;
-                b.angularVelocity *= 0.8f;
+
+                b.velocity.x *= 1.0f;
+                b.angularVelocity *= 0.6f;  
+
             }
-            if (b.position.x < -1.0f) {
-                b.position.x = -1.0f;
+			if (b.position.y > 1.0f) {
+				b.position.y = 1.0f;
+				b.velocity.y *= -0.5f;
+				b.angularVelocity *= 0.8f;
+			}
+            if (b.position.x < -0.98f) {
+                b.position.x = -0.98f;
                 b.velocity.x *= -0.6f;
-                b.angularVelocity *= 0.8f;
+                b.angularVelocity *= 0.8f;  
             }
-            else if (b.position.x > 1.0f) {
-                b.position.x = 1.0f;
+            else if (b.position.x > 0.98f) {
+                b.position.x = 0.98f;
                 b.velocity.x *= -0.6f;
                 b.angularVelocity *= 0.8f;
             }
