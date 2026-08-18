@@ -132,12 +132,12 @@ int main() {
 
     std::vector<DistanceConstraint> constraints;
 
-    RigidBody bodyA(Vec2(-0.5f, 0.0f), 0.03f, 0.03f);
-    RigidBody bodyB(Vec2(0.5f, 0.0f), 0.03f, 0.03f);
+    RigidBody bodyA(Vec2(-0.5f, 0.0f), 0.03f, 0.03f, 1.0f);
+    RigidBody bodyB(Vec2(0.5f, 0.0f), 0.03f, 0.03f, 1.0f);
 
     bodies.push_back(bodyA);
     bodies.push_back(bodyB);
-    constraints.push_back(DistanceConstraint(&bodies[0], &bodies[1], 1.0f));
+    constraints.push_back(DistanceConstraint(&bodies[0], &bodies[1], 0.5f)); // ------------------------------------------------------- WHERE TO CHANGE DISTANCE CONSTRAINTS SO I DONT FORGET LIKE AN NUGGET
     //--------------------------------------------------------------------------------------------------------------
 
     float bodyQuad[] = {
@@ -209,7 +209,7 @@ int main() {
                 b.velocity.y *= -0.5f;
 
                 b.velocity.x *= 1.0f;
-                b.angularVelocity *= 0.6f;  
+                b.angularVelocity *= 0.f;  
 
             }
 			if (b.position.y > 1.0f) {
