@@ -166,6 +166,7 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
   <ItemGroup>
     <ClInclude Include="axisB.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Constraint.h" />
     <ClInclude Include="RigidBody.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

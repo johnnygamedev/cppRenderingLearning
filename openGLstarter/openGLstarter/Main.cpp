@@ -9,6 +9,8 @@
 #include "RigidBody.h"
 #include "Collision.h"
 #include "axisB.h"
+#include "Constraint.h"
+
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -37,6 +39,7 @@ static unsigned int compileShader(unsigned int type, const char* source) {
     }
     return id;
 }
+
 // its the var name! loading a whole bunch of shaders!
 unsigned int loadShader(const char* vertPath, const char* fragPath) {
     std::ifstream vFile(vertPath), fFile(fragPath);
@@ -87,7 +90,8 @@ unsigned int createVAO(float* verts, int size, unsigned int& vbo_out) {
     vbo_out = VBO;
     return VAO;
 }
-// this is where the fun begins <---------------------------------------------------------------------------------------------------------------------------Main {} 
+
+// this is where the fun begins <---------------------------------------------------------------------------------------------------------------------------Main {}
 int main() {
     if (!glfwInit()) return -1;
 
@@ -113,11 +117,26 @@ int main() {
     uniforms.offset = glGetUniformLocation(shaderProgram, "uOffset");
     uniforms.colour = glGetUniformLocation(shaderProgram, "shapeColour");
     uniforms.angle = glGetUniformLocation(shaderProgram, "uAngle");
+
     //random(i keep losing where it is) fs < ------------------------------------------------------------------------------------------------------------------------ Rand Here
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_real_distribution<float> distVelX(-2.0f, 2.0f);
     std::uniform_real_distribution<float> distAngVel(-5.0f, 5.0f);
+
+    //------------------------------------Constrains bs ( need to keep this in a box for my mind to stay solid there is too much code 
+    std::vector<RigidBody> bodies;
+    bodies.reserve(1000);
+
+    std::vector<DistanceConstraint> constraints;
+
+    RigidBody bodyA(Vec2(-0.5f, 0.0f), 0.03f, 0.03f);
+    RigidBody bodyB(Vec2(0.5f, 0.0f), 0.03f, 0.03f);
+
+    bodies.push_back(bodyA);
+    bodies.push_back(bodyB);
+    constraints.push_back(DistanceConstraint(&bodies[0], &bodies[1], 1.0f));
+    //--------------------------------------------------------------------------------------------------------------
 
     float bodyQuad[] = {
         -0.015f,  0.015f, 0.0f,
@@ -132,18 +151,17 @@ int main() {
     unsigned int bodyVBO;
     unsigned int bodyVAO = createVAO(bodyQuad, sizeof(bodyQuad), bodyVBO);
 
-    std::vector<RigidBody> bodies;
     Vec2 gravity(0.0f, -9.81f);
 
     bool spaceLast = false;
     bool mouseLast = false;
 
-	size_t lastBodyCount = 0; 
+    size_t lastBodyCount = 0;
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-		size_t count = bodies.size(); // -------------------------------------------------------------Current changes
+        size_t count = bodies.size(); // -------------------------------------------------------------Current changes
         if (deltaTime > 0.05f) deltaTime = 0.05f;
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -152,12 +170,13 @@ int main() {
         bool spacePressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
         if (spacePressed && !spaceLast) {
             RigidBody body(Vec2(0.0f, -0.5f), 0.03f, 0.03f, 1.0f);
-			// random rng line for space <------------------------------------------------------------------------------------------------------------------------ rng line for the space
+            // random rng line for space <------------------------------------------------------------------------------------------------------------------------ rng line for the space
             body.velocity = Vec2(distVelX(rng), 5.0f);
             body.angularVelocity = 6.0f;
             bodies.push_back(body);
         }
         spaceLast = spacePressed;
+
         // mouse make sqaure
         bool mousePressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
         if (mousePressed && !mouseLast) {
@@ -175,6 +194,7 @@ int main() {
             bodies.push_back(body);
         }
         mouseLast = mousePressed;
+
         // giving the stats to the sqaures after placement and the collisons 
         for (auto& b : bodies) {
             b.addForce(gravity * b.mass);
@@ -184,39 +204,43 @@ int main() {
                 b.position.y = -0.9f;
                 b.velocity.y *= -0.5f;
                 b.angularVelocity *= 0.8f;
-
             }
             if (b.position.x < -1.0f) {
                 b.position.x = -1.0f;
                 b.velocity.x *= -0.6f;
                 b.angularVelocity *= 0.8f;
-
             }
             else if (b.position.x > 1.0f) {
                 b.position.x = 1.0f;
                 b.velocity.x *= -0.6f;
                 b.angularVelocity *= 0.8f;
             }
+        }
 
+        for (size_t i = 0; i < bodies.size(); ++i) {
+            AxisB boxA = bodies[i].getAxisB();
 
-            for (size_t i = 0; i < bodies.size(); ++i) {
-                AxisB boxA = bodies[i].getAxisB();
+            for (size_t j = i + 1; j < bodies.size(); ++j) {
+                AxisB boxB = bodies[j].getAxisB();
 
-                for (size_t j = i + 1; j < bodies.size(); ++j) {
-                    AxisB boxB = bodies[j].getAxisB();
+                if (!boxA.overlaps(boxB)) {
+                    continue;
+                }
 
-                    if (!boxA.overlaps(boxB)) {
-                        continue;
-                    }
-
-                    Manifold m = Collision::testBoxBox(bodies[i], bodies[j]);
-                    if (m.hasCollision) {
-                        Collision::resolveCollision(m);
-                    }
+                Manifold m = Collision::testBoxBox(bodies[i], bodies[j]);
+                if (m.hasCollision) {
+                    Collision::resolveCollision(m);
                 }
             }
         }
-        // clean up and stuff
+
+        for (int iter = 0; iter < 5; ++iter) {
+            for (auto& constraint : constraints) {
+                constraint.applyConstraint();
+            }
+        }
+
+        // colour and extra stuff
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -225,6 +249,20 @@ int main() {
         glBindVertexArray(bodyVAO);
 
         for (const auto& b : bodies) {
+			bool isConstrained = false;
+			for (const auto& constraint : constraints) {
+				if (constraint.bodyA == &b || constraint.bodyB == &b) {
+					isConstrained = true;
+					break;
+				}
+			}
+
+			if (isConstrained) {
+				glUniform3f(uniforms.colour, 1.0f, 0.2f, 0.1f);
+			}
+			else {
+				glUniform3f(uniforms.colour, 0.1f, 0.5f, 1.0f);
+			}
             glUniform2f(uniforms.offset, b.position.x, b.position.y);
             glUniform1f(uniforms.angle, b.orientation);
             glDrawArrays(GL_TRIANGLES, 0, 6);

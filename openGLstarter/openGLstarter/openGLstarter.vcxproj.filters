@@ -47,5 +47,8 @@
     <ClInclude Include="axisB.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Constraint.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
