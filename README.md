@@ -21,7 +21,7 @@ Window & Input: GLFW
 
 Math/RNG: Custom Vec2 struct, std::mt19937 RNG
 
-Controls & Controls Flow
+# Controls & Controls Flow
 
 Spacebar: Drops a new block with a random trajectory, position, and spin.
 
